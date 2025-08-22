@@ -706,33 +706,33 @@ function App() {
               <div className="code-content">
                 <pre className="text-sm">
                   {`// Upload and optimize image
-import { CloudBox } from '@cloudbox/sdk';
+                    import { CloudBox } from '@cloudbox/sdk';
 
-const cloudbox = new CloudBox({
-  apiKey: process.env.CLOUDBOX_API_KEY
-});
+                    const cloudbox = new CloudBox({
+                      apiKey: process.env.CLOUDBOX_API_KEY
+                    });
 
-// Upload with automatic optimization
-const result = await cloudbox.upload({
-  file: imageFile,
-  folder: 'products',
-  optimize: {
-    quality: 85,
-    format: 'webp',
-    resize: { width: 800 }
-  }
-});
+                    // Upload with automatic optimization
+                    const result = await cloudbox.upload({
+                      file: imageFile,
+                      folder: 'products',
+                      optimize: {
+                        quality: 85,
+                        format: 'webp',
+                        resize: { width: 800 }
+                      }
+                    });
 
-// Get optimized CDN URL
-const optimizedUrl = result.url;
-console.log('CDN URL:', optimizedUrl);
+                    // Get optimized CDN URL
+                    const optimizedUrl = result.url;
+                    console.log('CDN URL:', optimizedUrl);
 
-// Use with transformations
-const thumbnail = cloudbox.transform(result.id)
-  .resize(200, 200)
-  .quality(90)
-  .format('webp')
-  .url();`}
+                    // Use with transformations
+                    const thumbnail = cloudbox.transform(result.id)
+                      .resize(200, 200)
+                      .quality(90)
+                      .format('webp')
+                      .url();`}
                 </pre>
               </div>
             </div>
@@ -909,7 +909,7 @@ const thumbnail = cloudbox.transform(result.id)
               © 2025 CloudBox. All rights reserved.
             </div>
             <div className="text-sm text-gray-400 mt-4 sm:mt-0">
-              Made with ❤️ for developers worldwide
+              Made with ❤️ for developers
             </div>
           </div>
         </div>
