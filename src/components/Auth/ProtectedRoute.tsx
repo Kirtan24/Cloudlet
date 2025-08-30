@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import AuthContainer from './AuthContainer';
+import LandingPage from '../LandingPage';
 import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
@@ -9,6 +10,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { user, isLoading } = useAuth();
+  const [showAuth, setShowAuth] = React.useState(false);
 
   if (isLoading) {
     return (
@@ -25,7 +27,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!user) {
-    return <AuthContainer />;
+    if (showAuth) {
+      return <AuthContainer />;
+    }
+    return <LandingPage onShowAuth={() => setShowAuth(true)} />;
   }
 
   return <>{children}</>;

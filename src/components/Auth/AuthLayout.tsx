@@ -53,7 +53,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle }) =>
               <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-lg"></div>
             </div>
             <span className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Cloudlet
+              CloudBox
             </span>
           </div>
           <h1 className="text-3xl font-bold mb-2 bg-gradient-to-b from-white to-gray-300 bg-clip-text text-transparent">

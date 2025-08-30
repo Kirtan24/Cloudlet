@@ -173,7 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     : "group-hover:text-white"
                 )}
               >
-                <item.icon className="h-5 w-5 flex-shrink-0" />
+                CloudBox
               </span>
               {!isCollapsed && (
                 <span
