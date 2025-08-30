@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useAuth } from "../../contexts/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface HeaderProps {
   onSearch?: (query: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onSearch }) => {
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [notifications] = useState([
     { id: 1, title: "New API key created", time: "2 minutes ago", read: false },
@@ -46,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
       </div>
 
       {/* Notifications */}
-      <div className="flex items-center">
+      <div className="flex items-center space-x-4">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <Button
@@ -107,6 +110,43 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                   View all notifications
                 </Button>
               </div>
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+
+        {/* User Menu */}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>
+            <Button
+              variant="ghost"
+              className="flex items-center space-x-2 text-gray-300 hover:text-white"
+            >
+              <Avatar className="h-8 w-8">
+                <AvatarImage src={user?.avatar} alt={user?.name} />
+                <AvatarFallback className="bg-blue-600 text-white text-sm">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden md:block">{user?.name}</span>
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              className="w-56 bg-gray-800 rounded-md shadow-lg border border-gray-700 p-1 z-50"
+              align="end"
+              sideOffset={8}
+            >
+              <div className="px-2 py-1.5 text-sm text-gray-400">
+                Signed in as <span className="text-white">{user?.email}</span>
+              </div>
+              <DropdownMenu.Separator className="h-px bg-gray-700 my-1" />
+              <DropdownMenu.Item 
+                className="flex items-center px-2 py-1.5 text-sm text-red-400 hover:bg-red-900/20 rounded cursor-pointer"
+                onClick={logout}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign out
+              </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
         </DropdownMenu.Root>

@@ -24,9 +24,42 @@ import {
   Play,
 } from "lucide-react";
 import Dashboard from "./components/Dashboard/Dashboard";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import AuthContainer from "./components/Auth/AuthContainer";
+import AuthSuccess from "./components/Auth/AuthSuccess";
+import AuthError from "./components/Auth/AuthError";
 
-function App() {
-  const [showDashboard, setShowDashboard] = useState(false);
+// Main App Component
+const AppContent: React.FC = () => {
+  const { user } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
+
+  // Handle OAuth callback routes
+  if (window.location.pathname === '/auth/success') {
+    return <AuthSuccess />;
+  }
+  
+  if (window.location.pathname === '/auth/error') {
+    return <AuthError />;
+  }
+
+  // If user is authenticated, show dashboard
+  if (user) {
+    return <Dashboard />;
+  }
+
+  // If auth is requested, show auth container
+  if (showAuth) {
+    return <AuthContainer />;
+  }
+
+  // Otherwise show landing page
+  return <LandingPage onShowAuth={() => setShowAuth(true)} />;
+};
+
+const LandingPage: React.FC<{ onShowAuth: () => void }> = ({ onShowAuth }) => {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -56,11 +89,6 @@ function App() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  // Show dashboard if user is signed in
-  if (showDashboard) {
-    return <Dashboard />;
-  }
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -160,10 +188,13 @@ function App() {
 
             <div className="hidden md:flex items-center space-x-4">
               <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 relative group">
-                <span onClick={() => setShowDashboard(true)}>Sign In</span>
+                <span onClick={onShowAuth}>Sign In</span>
                 <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300"></div>
               </button>
-              <button className="px-6 py-2 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 relative overflow-hidden group">
+              <button 
+                onClick={onShowAuth}
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 relative overflow-hidden group"
+              >
                 <span className="relative z-10">Get Started Free</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
               </button>
@@ -192,9 +223,12 @@ function App() {
                 <NavLink href="developers">Developers</NavLink>
                 <div className="pt-4 border-t border-white/10 space-y-2">
                   <button className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white transition-colors">
-                    <span onClick={() => setShowDashboard(true)}>Sign In</span>
+                    <span onClick={onShowAuth}>Sign In</span>
                   </button>
-                  <button className="block w-full px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg font-medium">
+                  <button 
+                    onClick={onShowAuth}
+                    className="block w-full px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg font-medium"
+                  >
                     Get Started Free
                   </button>
                 </div>
@@ -250,7 +284,10 @@ function App() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-            <button className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 overflow-hidden">
+            <button 
+              onClick={onShowAuth}
+              className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 overflow-hidden"
+            >
               <span className="relative z-10 flex items-center space-x-2">
                 <Rocket className="h-5 w-5" />
                 <span>Launch Your Project</span>
@@ -801,7 +838,10 @@ function App() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-            <button className="cta-button cta-button-primary group">
+            <button 
+              onClick={onShowAuth}
+              className="cta-button cta-button-primary group"
+            >
               <span className="relative z-10 flex items-center space-x-2">
                 <Rocket className="h-5 w-5" />
                 <span>Start Your Free Trial</span>
@@ -915,6 +955,14 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
