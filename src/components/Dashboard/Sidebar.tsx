@@ -149,11 +149,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               key={item.id}
               onClick={() => onSectionChange(item.id)}
               className={cn(
-                "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
+                "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group outline-none",
                 isCollapsed ? "justify-center" : "",
                 activeSection === item.id && !isCollapsed
                   ? "bg-blue-500/10 border border-blue-500/30 shadow text-blue-400 font-semibold"
-                  : "hover:bg-gray-800 text-gray-300"
+                  : ""
               )}
               title={item.label}
               aria-current={activeSection === item.id ? "page" : undefined}

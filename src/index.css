@@ -72,6 +72,12 @@ body {
   overflow-x: hidden;
 }
 
+button:focus,
+a:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
 html {
   scroll-behavior: smooth;
 }
